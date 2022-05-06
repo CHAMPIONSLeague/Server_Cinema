@@ -1,2 +1,2 @@
 # Server_Cinema
-Database gestito da @c3cch3tto
+Database gestito da @C3cch3tto
