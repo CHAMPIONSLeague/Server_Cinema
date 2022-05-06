@@ -1,2 +1,2 @@
 # Server_Cinema
-DB cecchetto
+Database gestito da @c3cch3tto
