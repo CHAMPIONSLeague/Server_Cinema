@@ -10,7 +10,7 @@
     $password = "";
     $dbname = "cinema";
 
-    $email = $data -> email;
+    $user = $data -> username;
     $pass = $data -> password;
 
     // Creazione connessione
@@ -20,8 +20,8 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        if(!empty($email) && !empty($pass)){
-            $sql = "SELECT username FROM utente WHERE email = '$email' AND password = '$pass'";
+        if(!empty($user) && !empty($pass)){
+            $sql = "SELECT email FROM utente WHERE username = '$user' AND password = '$pass'";
             $result = $connessione -> query($sql);
     
             if($result -> num_rows > 0){
