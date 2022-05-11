@@ -21,8 +21,11 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        if(!empty($email) && !empty($pass)){
-            $sql = "INSERT INTO utente('username', 'email', 'password') VALUES('$user', '$email', '$pass')";
+        if(!empty($email) && !empty($pass) && !empty($user)){
+            $sql = "INSERT INTO utente(username, email, password) VALUES('$user', '$email', '$pass')";
+            $connessione -> query($sql);
+
+            $sql = "SELECT username FROM utente WHERE email = '$email'";
             $result = $connessione -> query($sql);
     
             if($result -> num_rows > 0){
