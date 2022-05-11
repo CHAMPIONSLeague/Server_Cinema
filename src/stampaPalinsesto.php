@@ -27,8 +27,8 @@
                            "cod_fi"=>$row["codice_film"],
                            "data_ora"=>$row["data_ora"],
                            "p_occupati"=>$row["p_occupati"]);
+            echo json_encode($array);
         }
-        echo json_encode($array);
     }
     $connessione -> close();
 ?>
