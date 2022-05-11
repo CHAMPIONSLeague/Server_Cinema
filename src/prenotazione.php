@@ -30,6 +30,12 @@
             if($result -> num_rows > 0){
                 if($row["p_occupati"]<$row["dim_sala"]){
                     $array = array("ris" => "PE");
+                    //update dei posti nello spettacolo nel caso ci siano posti disponibili
+                    $sql = "UPDATE spettacolo
+                            SET p_occupati = p_occupati+1";
+                    $connessione -> query($sql);
+                    //
+                    $sql = "INSERT INTO prenotazione(username,codice_film,data_ora) VALUES "
                 }else if($row["p_occupati"]=$row["dim_sala"]){
                     $array = array("ris" => "PN");
                 }
