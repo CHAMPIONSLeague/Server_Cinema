@@ -21,13 +21,23 @@
         $array = array("ris" => "Connessione Persa");
     }else{
         if(!empty($user) && !empty($pass)){
-            $sql = "SELECT email FROM utente WHERE username = '$user' AND password = '$pass'";
+            $sql = "SELECT privilegi FROM utente WHERE username = '$user' AND password = '$pass'";
             $result = $connessione -> query($sql);
-    
+            
+            $row = $result -> fetch_assoc();
+
             if($result -> num_rows > 0){
-                $array = array("ris" => "Y");
+                if($row["privilegi"] == 1){
+                    $array = array("ris" => "YA");
+                }else if($row["privilegi"] == 0){
+                    $array = array("ris" => "YU");
+                }
             }else{ 
-                $array = array("ris" => "N");
+                if($row["privilegi"] == 1){
+                    $array = array("ris" => "NA");
+                }else if($row["privilegi"] == 0){
+                    $array = array("ris" => "NU");
+                }
             }
         }else{
             $array = array("ris" => "Campi mancanti");

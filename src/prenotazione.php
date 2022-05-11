@@ -9,7 +9,9 @@
     $username = "root";
     $password = "";
     $dbname = "cinema";
-    
+
+    $cod_sp = $data -> cod_sp;
+
     // Creazione connessione
     $connessione = new mysqli($servername, $username, $password, $dbname);
 
@@ -17,16 +19,17 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        $sql = "SELECT * FROM spettacolo";
-        $result = $connessione -> query($sql);
-        
-        //caricamento dei dati sull'array
-        while($row = $result -> fetch_assoc()){
-            $array = ("cod_sp"=>$row["codice_spettacolo"],
-                      "cod_sa"=>$row["codice_sala"],
-                      "cod_fi"=>$row["codice_film"],
-                      "data_ora"=>$row["data_ora"],
-                      "p_occupati"=>$row["p_occupati"]);
+        if(!empty($cod_sp)){
+            $sql = "SELECT ";
+            $result = $connessione -> query($sql);
+    
+            if($result -> num_rows > 0){
+                $array = array("ris" => "Y");
+            }else{ 
+                $array = array("ris" => "N");
+            }
+        }else{
+            $array = array("ris" => "Campi mancanti");
         }
         echo json_encode($array);
     }
