@@ -22,11 +22,11 @@
         
         //caricamento dei dati sull'array
         while($row = $result -> fetch_assoc()){
-            $array = ("cod_sp"=>$row["codice_spettacolo"],
-                      "cod_sa"=>$row["codice_sala"],
-                      "cod_fi"=>$row["codice_film"],
-                      "data_ora"=>$row["data_ora"],
-                      "p_occupati"=>$row["p_occupati"]);
+            $array = array("cod_sp"=>$row["codice_spettacolo"],
+                           "cod_sa"=>$row["codice_sala"],
+                           "cod_fi"=>$row["codice_film"],
+                           "data_ora"=>$row["data_ora"],
+                           "p_occupati"=>$row["p_occupati"]);
         }
         echo json_encode($array);
     }

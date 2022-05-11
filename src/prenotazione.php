@@ -20,11 +20,19 @@
         $array = array("ris" => "Connessione Persa");
     }else{
         if(!empty($cod_sp)){
-            $sql = "SELECT ";
+            $sql = "SELECT SP.p_occupati, SA.dim_sala
+                    FROM spettacolo SP, sala SA 
+                    WHERE SP.codice_spettacolo = '$cod_sp' AND SA.codice_sala = SP.codice_sala";
             $result = $connessione -> query($sql);
-    
+            
+            $row = $result -> fetch_assoc();
+
             if($result -> num_rows > 0){
-                $array = array("ris" => "Y");
+                if($row["p_occupati"]<$row["dim_sala"]){
+                    $array = array("ris" => "PE");
+                }else if($row["p_occupati"]=$row["dim_sala"]){
+                    $array = array("ris" => "PN");
+                }
             }else{ 
                 $array = array("ris" => "N");
             }
