@@ -3,11 +3,11 @@
     header("Access-Controll-Allow-Methods: POST");
 
     //estrarre il json
-    $data=json_decode(file_get_contents("php://input"));
+    $data = json_decode(file_get_contents("php://input"));
 
-    $nome_film=$data -> nome;
-    $durata=$data -> durata;
-    $descrizione=$data -> descrizione;
+    $nome_film = $data -> nome;
+    $durata = $data -> durata;
+    $descrizione = $data -> descrizione;
 
     if(!empty($nome_film) && !empty($durata) && !empty($descrizione)){
         $servername = "localhost";
