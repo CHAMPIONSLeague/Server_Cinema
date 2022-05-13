@@ -34,7 +34,8 @@
                     $sql = "UPDATE spettacolo
                             SET p_occupati = p_occupati+1";
                     $connessione -> query($sql);
-                    //
+                    
+                    //SQL ROTTO --> DA AGGIUSTARE
                     $sql = "INSERT INTO prenotazione(username,codice_film,data_ora) VALUES "
                 }else if($row["p_occupati"]=$row["dim_sala"]){
                     $array = array("ris" => "PN");
