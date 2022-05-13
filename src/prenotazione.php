@@ -10,7 +10,8 @@
     $password = "";
     $dbname = "cinema";
 
-    $cod_sp = $data -> cod_sp;
+    $user = $data -> username;
+    $cod_sp = $data -> codice_spettacolo;
 
     // Creazione connessione
     $connessione = new mysqli($servername, $username, $password, $dbname);
@@ -28,20 +29,25 @@
             $row = $result -> fetch_assoc();
 
             if($result -> num_rows > 0){
+                //controllo dei posti
                 if($row["p_occupati"]<$row["dim_sala"]){
-                    $array = array("ris" => "PE");
+                    //estraggo il codice del film per l'update
+                    $cod_film = $row["codice_film"];
                     //update dei posti nello spettacolo nel caso ci siano posti disponibili
                     $sql = "UPDATE spettacolo
-                            SET p_occupati = p_occupati+1";
+                            SET p_occupati = p_occupati+1
+                            WHERE codice_spettacolo = '$cod_sp'";
                     $connessione -> query($sql);
-                    
-                    //SQL ROTTO --> DA AGGIUSTARE
-                    $sql = "INSERT INTO prenotazione(username,codice_film,data_ora) VALUES "
+                    //inserisce la prenotazione all'interno della tabella
+                    $sql = "INSERT INTO prenotazione(username,codice_film,data_ora)
+                            VALUES('$user','$cod_film',CURRENT_TIMESTAMP)";
+                    $connessione -> query($sql);
+                    $array = array("ris" => "Y");
                 }else if($row["p_occupati"]=$row["dim_sala"]){
-                    $array = array("ris" => "PN");
+                    $array = array("ris" => "N");
                 }
             }else{ 
-                $array = array("ris" => "N");
+                $array = array("ris" => "Spettacolo inesistente");
             }
         }else{
             $array = array("ris" => "Campi mancanti");
