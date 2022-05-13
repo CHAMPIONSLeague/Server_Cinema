@@ -24,7 +24,7 @@
             $sql="SELECT * FROM film where nome='$nome_film'";
             $result=$conn->query($sql);
             if ($result->num_rows>0){
-                $array=array("ris"=>"Esiste già una film con questo nome");
+                $array=array("ris"=>"Esiste gia' una film con questo nome");
                 echo json_encode($array);
             }else{
                 $sql="INSERT INTO film (nome, durata, descrizione) VALUES ('$nome_film', '$durata', '$descrizione')";
