@@ -5,12 +5,12 @@
     //estrarre il json
     $data = json_decode(file_get_contents("php://input"));
 
-    $email = $data -> email;
+    $user = $data -> user;
     $pass = $data -> password;
     $new_user = $data -> new_user; //associo alla variabile $new_email l'email inviata dal client tramite key json "new_email";
-    $funx = $data -> funx;
+    $cmd = $data -> cmd;
 
-    if(!empty($email) && !empty($pass)){
+    if(!empty($user) && !empty($pass)){
         $servername = "localhost";
 		$username = "root";
 		$password = "";
@@ -22,26 +22,29 @@
             die("Connection failed: " . $conn->connect_error);
             $array = array("ris" => "Connessione Persa");
 		}else{
-            if(strcmp($funx, "ch_user") != 0){
+            if(strcmp($cmd, "ch_user") != 0){
                 $sql="SELECT * 
                       FROM utente
-                      WHERE email = '$email' AND password = '$pass'";
+                      WHERE username = '$user' AND password = '$pass'";
                 $result=$conn->query($sql);
                 if ($result->num_rows>0){
-                    //se la risposta è Y allora ricevo dal client la nuova mail;
+                    //se la risposta è Y allora ricevo dal client il nuovo username;
                     $array=array("ris"=>"Y");
                     echo json_encode($array);
+                }else{
+                    $array=array("ris"=>"N");
+                    echo json_encode($array);
                 }
-            }elseif(strcmp($funx, "ch_user") == 0){
+            }elseif(strcmp($cmd, "ch_user") == 0){
                 //aggiornamento dell'user nella tabella
                 $sql = "UPDATE utente
                         SET username = '$new_user'
-                        WHERE email = '$email' AND password = '$pass'";
+                        WHERE username = '$user' AND password = '$pass'";
                 if($conn->query($sql)){
-                    $array=array("ris"=>"Username aggiornato");
+                    $array=array("ris"=>"Y"); //username aggiornato
                     echo json_encode($array);
                 }else{
-                    $array=array("ris"=>"Questo username e' gia' registrato");
+                    $array=array("ris"=>"N"); //username già registrato
                     echo json_encode($array);
                 }
             }
