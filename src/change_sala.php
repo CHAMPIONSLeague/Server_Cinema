@@ -41,25 +41,35 @@
                     echo json_encode($array);
                 }
             }elseif((strcmp($cmd, "ch_sala") == 0)){
-                //controllo se sono presenti sale con il nome inserito dal client
+                //controllo se sono presenti spettacoli attivi assaciati alla sala interessata
                 $sql = "SELECT *
-                        FROM sala
-                        WHERE nome = '$new_sa_name'";
+                        FROM spettacolo
+                        WHERE codice_sala = '$cod_sa' AND data_ora >= CURRENT_TIMESTAMP";
                 $result = $conn->query($sql);
                 if($result->num_rows>0){
                     $array = array("ris"=>"N");
                     echo json_encode($array);
                 }else{
-                    //aggiornamento dei dati della sala interessata
-                    $sql = "UPDATE sala
-                            SET nome = '$new_sa_name', dim_sala = '$new_sa_dim'
-                            WHERE codice_sala = $cod_sa";
-                    if($conn->query($sql)){
-                        $array = array("ris"=>"Y");
-                        echo json_encode($array);
-                    }else{
+                    //controllo se esistono già della sale con il nome inserito dal client
+                    $sql = "SELECT *
+                            FROM sala
+                            WHERE codice_sala = '$cod_sa' AND nome = '$new_sa_name'";
+                    $result = $conn->query($sql);
+                    if($result->num_rows>0){
                         $array = array("ris"=>"N");
                         echo json_encode($array);
+                    }else{
+                        //aggiornamento dei dati della sala interessata
+                        $sql = "UPDATE sala
+                                SET nome = '$new_sa_name', dim_sala = '$new_sa_dim'
+                                WHERE codice_sala = $cod_sa";
+                        if($conn->query($sql)){
+                            $array = array("ris"=>"Y");
+                            echo json_encode($array);
+                        }else{
+                            $array = array("ris"=>"N");
+                            echo json_encode($array);
+                        }
                     }
                 }
             }
