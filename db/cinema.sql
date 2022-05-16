@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mag 08, 2022 alle 20:29
+-- Creato il: Mag 14, 2022 alle 23:33
 -- Versione del server: 10.4.21-MariaDB
 -- Versione PHP: 8.0.10
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `film` (
   `codice_film` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
+  `durata` time NOT NULL,
   `descrizione` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -37,9 +38,27 @@ CREATE TABLE `film` (
 -- Dump dei dati per la tabella `film`
 --
 
-INSERT INTO `film` (`codice_film`, `nome`, `descrizione`) VALUES
-(1, 'Doctor Strange nel Multiverso della Follia', 'Il dottor Stephen Strange continua le sue ricerche sul Time Stone. Tuttavia, un vecchio amico trasformatosi in nemico cerca di distruggere tutti gli stregoni sulla Terra, scherzando con il piano di Strange.'),
-(2, 'Uncharted', 'Nathan Drake e il suo compagno di avventure Sully si lanciano in una pericolosa ricerca per trovare il più grande tesoro perduto, mentre seguono anche gli indizi che potrebbero portare al fratello di Nathan, scomparso da tempo.');
+INSERT INTO `film` (`codice_film`, `nome`, `durata`, `descrizione`) VALUES
+(1, 'Doctor Strange nel Multiverso della Follia', '00:00:00', 'Il dottor Stephen Strange continua le sue ricerche sul Time Stone. Tuttavia, un vecchio amico trasformatosi in nemico cerca di distruggere tutti gli stregoni sulla Terra, scherzando con il piano di Strange.'),
+(2, 'Uncharted', '00:00:00', 'Nathan Drake e il suo compagno di avventure Sully si lanciano in una pericolosa ricerca per trovare il più grande tesoro perduto, mentre seguono anche gli indizi che potrebbero portare al fratello di Nathan, scomparso da tempo.');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `palinsesto`
+--
+
+CREATE TABLE `palinsesto` (
+  `id` int(11) NOT NULL,
+  `codice_spettacolo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `palinsesto`
+--
+
+INSERT INTO `palinsesto` (`id`, `codice_spettacolo`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -50,7 +69,7 @@ INSERT INTO `film` (`codice_film`, `nome`, `descrizione`) VALUES
 CREATE TABLE `prenotazione` (
   `codice_prenotazione` int(11) NOT NULL,
   `username` varchar(30) NOT NULL,
-  `codice_spettacolo` int(11) NOT NULL,
+  `codice_film` int(11) NOT NULL,
   `data_ora` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -58,9 +77,12 @@ CREATE TABLE `prenotazione` (
 -- Dump dei dati per la tabella `prenotazione`
 --
 
-INSERT INTO `prenotazione` (`codice_prenotazione`, `username`, `codice_spettacolo`, `data_ora`) VALUES
+INSERT INTO `prenotazione` (`codice_prenotazione`, `username`, `codice_film`, `data_ora`) VALUES
 (1, 'test.user', 1, '2022-05-08 19:58:30'),
-(2, 'test.user', 2, '2022-05-08 19:58:30');
+(2, 'test.user', 2, '2022-05-08 19:58:30'),
+(3, 'test.user', 2, '2022-05-09 15:05:48'),
+(4, 'test.user', 1, '2022-05-13 21:21:18'),
+(5, 'test.user', 1, '2022-05-13 21:25:38');
 
 -- --------------------------------------------------------
 
@@ -101,8 +123,8 @@ CREATE TABLE `spettacolo` (
 --
 
 INSERT INTO `spettacolo` (`codice_spettacolo`, `codice_sala`, `codice_film`, `data_ora`, `p_occupati`) VALUES
-(1, 1, 1, '2022-05-08 19:57:27', 0),
-(2, 2, 2, '2022-05-08 19:57:27', 0);
+(1, 1, 1, '2022-05-08 19:57:27', 30),
+(2, 2, 2, '2022-05-08 19:57:27', 1);
 
 -- --------------------------------------------------------
 
@@ -123,7 +145,8 @@ CREATE TABLE `utente` (
 
 INSERT INTO `utente` (`username`, `email`, `password`, `privilegi`) VALUES
 ('test.admin', 'test.admin@gmail.com', 'test.admin', 1),
-('test.user', 'test.user@gmail.com', 'test.user', 0);
+('test.user', 'test.user@gmail.com', 'test.user', 0),
+('test.utente', 'test.utente@gmail.com', 'test.utente', 0);
 
 --
 -- Indici per le tabelle scaricate
@@ -136,12 +159,19 @@ ALTER TABLE `film`
   ADD PRIMARY KEY (`codice_film`);
 
 --
+-- Indici per le tabelle `palinsesto`
+--
+ALTER TABLE `palinsesto`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cod_spettacolo` (`codice_spettacolo`);
+
+--
 -- Indici per le tabelle `prenotazione`
 --
 ALTER TABLE `prenotazione`
   ADD PRIMARY KEY (`codice_prenotazione`),
   ADD KEY `utenteKey-prenotazioneutente` (`username`),
-  ADD KEY `spettacoloKey-prenotazionespettacolo` (`codice_spettacolo`);
+  ADD KEY `filmKey-prenotazionefilm` (`codice_film`);
 
 --
 -- Indici per le tabelle `sala`
@@ -174,10 +204,16 @@ ALTER TABLE `film`
   MODIFY `codice_film` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT per la tabella `palinsesto`
+--
+ALTER TABLE `palinsesto`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT per la tabella `prenotazione`
 --
 ALTER TABLE `prenotazione`
-  MODIFY `codice_prenotazione` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `codice_prenotazione` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT per la tabella `sala`
@@ -196,10 +232,16 @@ ALTER TABLE `spettacolo`
 --
 
 --
+-- Limiti per la tabella `palinsesto`
+--
+ALTER TABLE `palinsesto`
+  ADD CONSTRAINT `cod_spettacolo` FOREIGN KEY (`codice_spettacolo`) REFERENCES `spettacolo` (`codice_spettacolo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Limiti per la tabella `prenotazione`
 --
 ALTER TABLE `prenotazione`
-  ADD CONSTRAINT `spettacoloKey-prenotazionespettacolo` FOREIGN KEY (`codice_spettacolo`) REFERENCES `spettacolo` (`codice_spettacolo`),
+  ADD CONSTRAINT `filmKey-prenotazionefilm` FOREIGN KEY (`codice_film`) REFERENCES `film` (`codice_film`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `utenteKey-prenotazioneutente` FOREIGN KEY (`username`) REFERENCES `utente` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
