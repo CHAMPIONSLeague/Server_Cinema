@@ -43,7 +43,7 @@
                         WHERE email = '$new_email'";
                 $result = $conn-> query($sql);
                 if($result->num_rows>0){
-                    $array=array("ris"=>"N"); //email già registrato
+                    $array=array("ris"=>"Questa email appartiene a qualcun'altro"); //email già registrato
                     echo json_encode($array);
                 }else{
                     //aggiornamento dell'email nella tabella
