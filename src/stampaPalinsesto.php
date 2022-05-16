@@ -17,14 +17,17 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        $sql = "SELECT * FROM spettacolo";
+        $sql = "SELECT PAL.codice_spettacolo, F.nome, SP.codice_sala, SP.data_ora, SP.p_occupati
+        FROM spettacolo SP, palinsesto PAL, film F
+        WHERE SP.codice_spettacolo = PAL.codice_spettacolo
+        AND F.codice_film = SP.codice_film;";
         $result = $connessione -> query($sql);
         
         //caricamento dei dati sull'array
         while($row = $result -> fetch_assoc()){
             $array = array("Spettacolo"=>$row["codice_spettacolo"],
                            "Sala"=>$row["codice_sala"],
-                           "Film"=>$row["codice_film"],
+                           "Film"=>$row["nome"],
                            "Data/Ora"=>$row["data_ora"],
                            "Posti occupati"=>$row["p_occupati"]);
             echo json_encode($array);
