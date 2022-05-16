@@ -31,12 +31,11 @@
                 
                 if($conn->query($sql)===true){
                     $array=array("ris"=>"Y");
-                    echo json_encode($array);
                 }else{
-                    $array=array("ris"=>"N");
-                    echo json_encode($array);            
+                    $array=array("ris"=>"N"); 
                 }
             }
+            echo json_encode($array);
         }
 
     }
