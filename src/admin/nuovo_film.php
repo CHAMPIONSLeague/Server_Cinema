@@ -21,7 +21,8 @@
             die("Connection failed: " . $conn->connect_error);
             $array = array("ris" => "Connessione Persa");
 		}else{
-            $sql="SELECT * FROM film where nome='$nome_film'";
+            //serve per controllare se esiste già un film con questo nome
+            $sql="SELECT * FROM film where nome='$nome_film'"; 
             $result=$conn->query($sql);
             if ($result->num_rows>0){
                 $array=array("ris"=>"Esiste gia' una film con questo nome");
