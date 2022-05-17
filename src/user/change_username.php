@@ -5,9 +5,9 @@
     //estrarre il json
     $data = json_decode(file_get_contents("php://input"));
 
-    $user = $data -> user;
+    $user = $data -> username;
     $pass = $data -> password;
-    $new_user = $data -> new_user; //associo alla variabile $new_email l'email inviata dal client tramite key json "new_email";
+    $new_user = $data -> new_user; 
     $cmd = $data -> cmd;
 
     if(!empty($user) && !empty($pass)){
@@ -39,7 +39,9 @@
                 //aggiornamento dell'user nella tabella
                 $sql = "UPDATE utente
                         SET username = '$new_user'
-                        WHERE username = '$user' AND password = '$pass'";
+                        WHERE username = '$user' 
+                        AND password = '$pass'";
+                
                 if($conn->query($sql)){
                     $array=array("ris"=>"Y"); //username aggiornato
                     echo json_encode($array);
