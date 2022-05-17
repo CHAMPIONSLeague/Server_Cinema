@@ -11,9 +11,9 @@
 
     if(!empty($nome_film) && !empty($durata) && !empty($descrizione)){
         $servername = "localhost";
-		$username = "root";
-		$password = "";
-		$dbname = "cinema";
+        $username = "clowncinema";
+        $password = "85GuHQA67pzx";
+        $dbname = "my_clowncinema";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
 		// Check connection

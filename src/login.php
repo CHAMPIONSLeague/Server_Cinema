@@ -6,9 +6,9 @@
     $data = json_decode(file_get_contents("php://input"));
     
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "cinema";
+    $username = "clowncinema";
+    $password = "85GuHQA67pzx";
+    $dbname = "my_clowncinema";
 
     $user = $data -> username;
     $pass = $data -> password;

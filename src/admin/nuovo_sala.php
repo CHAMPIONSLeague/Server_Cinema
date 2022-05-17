@@ -13,9 +13,9 @@ use LDAP\Result;
 
     if(!empty($nome_sala) && !empty($dim_sala)){
         $servername = "localhost";
-		$username = "root";
-		$password = "";
-		$dbname = "cinema";
+        $username = "clowncinema";
+        $password = "85GuHQA67pzx";
+        $dbname = "my_clowncinema";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
 		// Check connection
