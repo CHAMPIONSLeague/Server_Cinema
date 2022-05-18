@@ -23,7 +23,7 @@
         if(!empty($cod_sp)){
             $sql = "SELECT SP.p_occupati, SA.dim_sala, SP.codice_film
                     FROM spettacolo SP, sala SA
-                    WHERE SP.codice_spettacolo = $cod_sp
+                    WHERE SP.codice_spettacolo = '$cod_sp'
                     AND SA.codice_sala = SP.codice_sala";
             $result = $connessione -> query($sql);
             $row = $result -> fetch_assoc();
@@ -40,8 +40,8 @@
                     $connessione -> query($sql);
 
                     //inserisce la prenotazione all'interno della tabella
-                    $sql = "INSERT INTO prenotazione(username, codice_film, data_ora)
-                            VALUES('$user','$cod_film', CURRENT_TIMESTAMP)";
+                    $sql = "INSERT INTO prenotazione(id, codice_spettacolo, data_ora)
+                            VALUES((SELECT id FROM utente WHERE username = '$user'),'$cod_sp', CURRENT_TIMESTAMP)";
                     
                     if($connessione -> query($sql)){
                         $array = array("ris" => "Y");
