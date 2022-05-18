@@ -29,6 +29,7 @@
                            );
             echo json_encode($array);
         }
+        $array = array("ris" => "Y");
     }
     $connessione -> close();
 ?>
