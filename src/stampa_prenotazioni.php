@@ -9,8 +9,6 @@
     $username = "clowncinema";
     $password = "85GuHQA67pzx";
     $dbname = "my_clowncinema";
-
-    $nome_film = $data -> nome_film;
     
     // Creazione connessione
     $connessione = new mysqli($servername, $username, $password, $dbname);
@@ -19,21 +17,16 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        $sql="SELECT * FROM film WHERE nome = '$nome_film'";
+        $sql="SELECT * FROM prenotazione";
         $result = $connessione -> query($sql);
-
-        if($result -> num_rows > 0){
-            //caricamento dei dati sull'array
-            while($row = $result -> fetch_assoc()){
-                $array = array("ris"=>"Y");
-                $array = array("codice_film"=>$row["codice_film"],
-                               "nome_film"=>$row["nome"],
-                               "durata"=>$row["durata"],
-                               "descrizione"=>$row["descrizione"]);
-                echo json_encode($array);
-            }
-        }else{
-            $array = array("ris"=>"Film non presente nel catalogo");
+        
+        //caricamento dei dati sull'array
+        while($row = $result -> fetch_assoc()){
+            $array = array("codice_prenotazione"=>$row["codice_prenotazione"],
+                           "username"=>$row["username"],
+                           "codice_film"=>$row["codice_film"],
+                           "data_ora"=>$row["data_ora"],
+                           );
             echo json_encode($array);
         }
     }
