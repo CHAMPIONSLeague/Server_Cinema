@@ -4,6 +4,7 @@
 
     //estrazione json
     $data = json_decode(file_get_contents("php://input"));
+	$username = $data -> username;
     
     $servername = "localhost";
     $username = "root";
@@ -17,7 +18,7 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        $sql="SELECT * FROM prenotazione";
+        $sql="SELECT * FROM prenotazione WHERE username='$usernme'";
         $result = $connessione -> query($sql);
         
         //caricamento dei dati sull'array
