@@ -4,7 +4,6 @@
 
     //estrazione json
     $data = json_decode(file_get_contents("php://input"));
-	$username = $data -> username;
     
     $servername = "localhost";
     $username = "root";
@@ -18,16 +17,14 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        $sql="SELECT * FROM prenotazione WHERE username='$usernme'";
+        //TODO: sottrarre ai posti totali della sala i posti occupati e returnare quello con la chiave "ris"
+        $sql="SELECT (SA.dim_sala-SP.p_occupati) AS posti_liberi FROM sala SA, spettacolo SP WHERE SA.codice_sala=SP.codice_sala";
+
         $result = $connessione -> query($sql);
         
         //caricamento dei dati sull'array
         while($row = $result -> fetch_assoc()){
-            $array = array("codice_prenotazione"=>$row["codice_prenotazione"],
-                           "username"=>$row["username"],
-                           "codice_film"=>$row["codice_film"],
-                           "data_ora"=>$row["data_ora"],
-                           );
+            $array = array("posti_liberi"=>$row["posti_liberi"]);
             echo json_encode($array);
         }
     }
