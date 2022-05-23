@@ -23,32 +23,42 @@
     }else{
         if(!empty($user) and !empty($cod_sp)){
             if(strcmp($cmd, "del_pr") != 0){
-                //vado a vedere se sono presenti prenotazioni attive
+                //vado a vedere se sono presenti prenotazioni attive per l'utente
                 $sql = "SELECT *
                         FROM prenotazione
                         WHERE id = (SELECT id
                                     FROM utente
-                                    WHERE username = '$user') AND codice_spettacolo = '$cod_sp' AND data_ora < (SELECT data_ora
-                                                                                                                FROM spettacolo
-                                                                                                                WHERE codice_spettacolo = '$cod_sp')";
+                                    WHERE username = '$user') 
+                                    AND codice_spettacolo = '$cod_sp'
+                                    AND data_ora < (
+                                        SELECT data_ora
+                                        FROM spettacolo
+                                        WHERE codice_spettacolo = '$cod_sp'
+                                    )";
                 $result = $connessione -> query($sql);
+
                 if($result -> num_rows > 0){
                     $array = array("ris"=>"Y");
                 }else{
                     $array = array("ris"=>"N");
                 }
                 echo json_encode($array);
+
             }elseif(strcmp($cmd, "del_pr") == 0){
                 //cancello la prenotazione selezionata dall'utente
                 $sql = "DELETE FROM prenotazione
-                        WHERE codice_spettacolo = '$cod_sp' AND id = (SELECT id
-                                                                      FROM utente
-                                                                      WHERE username = '$user')";
+                        WHERE codice_spettacolo = '$cod_sp' 
+                        AND id = (
+                            SELECT id
+                            FROM utente
+                            WHERE username = '$user'
+                        )";
                 if($connessione -> query($sql)){
                     //aggiornamento dei posti occupati dello spettacolo interessato
                     $sql = "UPDATE spettacolo
                             SET p_occupati = p_occupati-1
                             WHERE codice_spettacolo = '$cod_sp'";
+
                     if($connessione->query($sql)){
                         $array = array("ris"=>"Y");
                     }else{
@@ -62,4 +72,4 @@
             }
         }
     }
-?>
+?>

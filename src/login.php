@@ -45,4 +45,4 @@
         echo json_encode($array);
     }
     $connessione -> close();
-?>
+?>

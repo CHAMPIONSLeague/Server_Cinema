@@ -9,8 +9,6 @@
     $username = "clowncinema";
     $password = "85GuHQA67pzx";
     $dbname = "my_clowncinema";
-
-    $nome_film = $data -> nome_film;
     
     // Creazione connessione
     $connessione = new mysqli($servername, $username, $password, $dbname);
@@ -19,18 +17,18 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     }else{
-        $sql="SELECT * FROM film WHERE nome = '$nome_film'";
-        $result = $connessione -> query($sql);
+        //TODO: sottrarre ai posti totali della sala i posti occupati e returnare quello con la chiave "ris"
+        $sql = "SELECT SP.codice_spettacolo, (SA.dim_sala-SP.p_occupati) AS posti_liberi FROM sala SA, spettacolo SP, palinsesto P WHERE SA.codice_sala = SP.codice_sala AND SP.codice_spettacolo = P.codice_spettacolo";
 
+        $result = $connessione -> query($sql);
         if($result -> num_rows > 0){
-            //caricamento dei dati sull'array
+        	//caricamento dei dati sull'array
             while($row = $result -> fetch_assoc()){
-                $array = array("ris"=>"Y","codice_film"=>$row["codice_film"],"nome_film"=>$row["nome"],"durata"=>$row["durata"],"descrizione"=>$row["descrizione"]);
+                $array = array("ris"=>"Y", "id"=>$row["codice_spettacolo"], "posti_liberi"=>$row["posti_liberi"]);
                 echo json_encode($array);
             }
         }else{
-            $array = array("ris"=>"Film non presente nel catalogo");
-            echo json_encode($array);
+        	$array = array("ris"=>"N");
         }
     }
     $connessione -> close();
