@@ -32,10 +32,10 @@
                 $oggetto = "Eliminazione account";
                 $txt = "
                         Clicca sul link per poter confermare di voler cambiare eliminare il tuo account!
-                        Se non sei stato tu contatta l'assistenza e cambia email tramite il client!
+                        Se non sei stato tu contatta l'assistenza e cambia la password tramite il client!
 
                         http://clowncinema.altervista.org/src/confirmDelete.php?token=Y&email=".$email;
-                $headers = "From: clowncinema@altervista.org";
+                $headers = "From: clowncinema <clowncinema@altervista.org>";
 
                 mail($email, $oggetto, $txt, $headers);
                 $array = array("ris" => "Y");

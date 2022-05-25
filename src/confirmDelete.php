@@ -25,13 +25,10 @@
 
             if ($connessione->query($sql)) {
                 $oggetto = "Account eliminato";
-                $txt = "Il tuo account è stato eliminato dai nostri DataBase!";
-                $headers = "From: clowncinema@altervista.org";
-
+                $txt = "Il tuo account è stato eliminato dai nostri Database!";
+                $headers = "From: clowncinema <clowncinema@altervista.org>";
                 mail($email, $oggetto, $txt, $headers);
-
-                $array = array("ris" => "Account eliminato");
-                echo json_encode($array);
+                echo $txt;
             } else {
                 $array = array("ris" => "Email errata"); //utente inesistente
                 echo json_encode($array);

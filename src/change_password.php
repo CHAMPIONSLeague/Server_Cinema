@@ -37,7 +37,7 @@
                 Clicca sul link per poter confermare di voler cambiare password!
 
                 http://clowncinema.altervista.org/src/verificaToken.php?token=".$token."&email=".$email;
-                $headers = "From: clowncinema@altervista.org";
+                $headers = "From: clowncinema <clowncinema@altervista.org>";
 
                 mail($email, $oggetto, $txt, $headers);
                 $array = array("ris"=>"Y");
