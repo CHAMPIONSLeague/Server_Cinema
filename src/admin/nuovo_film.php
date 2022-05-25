@@ -30,7 +30,7 @@
             }else{
                 $sql="INSERT INTO film (nome, durata, descrizione) VALUES ('$nome_film', '$durata', '$descrizione')";
                 
-                if($conn->query($sql)===true){
+                if($conn->query($sql)){
                     $array=array("ris"=>"Y");
                 }else{
                     $array=array("ris"=>"N"); 
@@ -40,4 +40,4 @@
         }
 
     }
-?>
+?>
