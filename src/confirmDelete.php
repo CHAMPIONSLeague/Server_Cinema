@@ -10,8 +10,8 @@
     $password = "85GuHQA67pzx";
     $dbname = "my_clowncinema";
 
-    $user = $data->username;
-    $email = $data->email;
+    $email = $_GET["email"];
+    $token = $_GET["token"];
 
     // Creazione connessione
     $connessione = new mysqli($servername, $username, $password, $dbname);
@@ -20,28 +20,20 @@
         die("Connection failed: " . $connessione->connect_error);
         $array = array("ris" => "Connessione Persa");
     } else {
-        if (!empty($user) && !empty($email)) {
-            $sql = "SELECT * FROM utente WHERE username = '$user' AND email = '$email'";
-            $result = $connessione->query($sql);
+        if ($token =="Y" && !empty($email)) {
+            $sql = "DELETE FROM utente WHERE email = '$email'";
 
-            if ($result->num_rows > 0) {
-                //utente esistente
-                $row = $result->fetch_assoc();
-                $email = $row["email"];
-
-                $oggetto = "Eliminazione account";
-                $txt = "
-                        Clicca sul link per poter confermare di voler cambiare eliminare il tuo account!
-                        Se non sei stato tu contatta l'assistenza e cambia email tramite il client!
-
-                        http://clowncinema.altervista.org/src/confirmDelete.php?token=Y&email=".$email;
+            if ($connessione->query($sql)) {
+                $oggetto = "Account eliminato";
+                $txt = "Il tuo account è stato eliminato dai nostri DataBase!";
                 $headers = "From: clowncinema@altervista.org";
 
                 mail($email, $oggetto, $txt, $headers);
-                $array = array("ris" => "Y");
+
+                $array = array("ris" => "Account eliminato");
                 echo json_encode($array);
             } else {
-                $array = array("ris" => "N"); //utente inesistente
+                $array = array("ris" => "Email errata"); //utente inesistente
                 echo json_encode($array);
             }
         } else {
