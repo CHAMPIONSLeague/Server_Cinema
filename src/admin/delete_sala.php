@@ -48,24 +48,34 @@
                     $array = array("ris"=>"N");
                     echo json_encode($array);
                 }else{
-                    //eliminazione spettacoli
-                    $sql = "DELETE FROM spettacolo
-                            WHERE codice_sala = '$cod_sa' AND data_ora <= CURRENT_TIMESTAMP";
+                    //eliminazione delle prenotazioni
+                    $sql = "DELETE FROM prenotazione
+                            WHERE codice_spettacolo = (SELECT codice_spettacolo
+                                                       FROM spettacolo
+                                                       WHERE codice_sala = '$cod_sa' AND data_ora <= CURRENT_TIMESTAMP)";
                     if($conn->query($sql)){
-                        //eliminazione sala
-                        $sql = "DELETE FROM sala
-                        WHERE codice_sala = '$cod_sa'";
+                        //eliminazione spettacoli
+                        $sql = "DELETE FROM spettacolo
+                                WHERE codice_sala = '$cod_sa' AND data_ora <= CURRENT_TIMESTAMP";
                         if($conn->query($sql)){
-                            $array = array("ris"=>"Y"); //eliminazioni spettacolo/i e sala effettuata
-                            echo json_encode($array);
+                            //eliminazione sala
+                            $sql = "DELETE FROM sala
+                            WHERE codice_sala = '$cod_sa'";
+                            if($conn->query($sql)){
+                                $array = array("ris"=>"Y"); //eliminazioni prenotazione/i, spettacolo/i, sala/e
+                                echo json_encode($array);
+                            }else{
+                                $array = array("ris"=>"N"); //errore eliminazione sala
+                                echo json_encode($array);
+                            }
                         }else{
-                            $array = array("ris"=>"N"); //errore eliminazione sala
+                            $array = array("ris"=>"N"); //errore eliminazione spettacolo/i
                             echo json_encode($array);
-                        }
+                        }                 
                     }else{
-                        $array = array("ris"=>"N"); //errore eliminazione spettacolo/i
+                        $array = array("ris"=>"N"); //errore eliminazione prenotazioni
                         echo json_encode($array);
-                    }                            
+                    }   
                 }
             }
         }
@@ -73,4 +83,4 @@
         $array = array("ris"=>"Campi mancanti");
         echo json_encode($array);
     }
-?>
+?>

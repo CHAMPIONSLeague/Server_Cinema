@@ -27,11 +27,6 @@
                         WHERE codice_film = '$cod_film'";
                 $result = $conn->query($sql);
                 if($result->num_rows>0){
-                    /** 
-                     * IMPORTANTE!
-                     * Se trova una sala l'api deve essere richiamata dal client
-                     * inviando si o no dal sout("Sei sicuro di voler eliminare questo film?");
-                    */
                     $array = array("ris"=>"Y");
                     echo json_encode($array);
                 }else{
@@ -48,30 +43,32 @@
                     $array = array("ris"=>"N");
                     echo json_encode($array);
                 }else{
-                    //eliminazione spettacoli
-                    $sql = "DELETE FROM spettacolo
-                            WHERE codice_film = '$cod_film' AND data_ora <= CURRENT_TIMESTAMP";
+                    //eliminazione prenotazioni associate al film
+                    $sql = "DELETE FROM prenotazione
+                            WHERE codice_spettacolo = (SELECT codice_spettacolo
+                                                       FROM spettacolo
+                                                       WHERE codice_film = '$cod_film')";
                     if($conn->query($sql)){
-                        //eliminazione prenotazioni associate al film
-                        $sql = "DELETE FROM prenotazione
-                                WHERE codice_film = '$cod_film'";
+                        //eliminazione spettacoli
+                        $sql = "DELETE FROM spettacolo
+                                WHERE codice_film = '$cod_film' AND data_ora <= CURRENT_TIMESTAMP";
                         if($conn->query($sql)){
                             //eliminazione film
                             $sql = "DELETE FROM film
                                     WHERE codice_film = '$cod_film'";        
                             if($conn->query($sql)){
-                                $array = array("ris"=>"Y"); //eliminazione spettacolo/i, prenotazione/i e film effettuate
+                                $array = array("ris"=>"Y"); //eliminazione prenotazione/i, spettacolo/i, e film effettuate
                                 echo json_encode($array);
                             }else{
-                                $array = array("ris"=>"N"); //eliminazione spettacolo/i e prenotazione/i effettuate (Errore: film)
+                                $array = array("ris"=>"N"); //eliminazione film
                                 echo json_encode($array);
                             }
                         }else{
-                            $array = array("ris"=>"N"); //eliminazione spettacolo/i effettuata (Errore: prenotazione)
+                            $array = array("ris"=>"N"); //eliminazione spettacolo/i
                             echo json_encode($array);
                         }                        
                     }else{
-                        $array = array("ris"=>"N"); //errore eliminazione spettacolo/i
+                        $array = array("ris"=>"N"); //errore eliminazione prenotazione/i
                         echo json_encode($array);
                     }                            
                 }
@@ -81,4 +78,4 @@
         $array = array("ris"=>"Campi mancanti");
         echo json_encode($array);
     }
-?>
+?>

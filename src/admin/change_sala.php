@@ -1,5 +1,4 @@
 <?php
-
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Controll-Allow-Methods: POST");
 
@@ -78,4 +77,4 @@
         $array = array("ris"=>"Campi mancanti");
         echo json_encode($array);
     }
-?>
+?>

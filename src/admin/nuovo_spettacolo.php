@@ -31,7 +31,7 @@
                 if($result -> num_rows > 0){
                     $sql = "SELECT *
                             FROM spettacolo
-                            WHERE codice_sala = '$cod_sa' AND codice_film = '$cod_fi AND data_ora = '$datehh''";
+                            WHERE codice_sala = '$cod_sa' AND codice_film = '$cod_fi' AND data_ora = '$datehh'";
                     $result = $conn -> query($sql);
                     if($result -> num_rows > 0){
                         $array = array("ris"=>"N");
@@ -54,4 +54,4 @@
             }
         }
     }
-?>
+?>

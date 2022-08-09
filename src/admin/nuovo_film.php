@@ -5,7 +5,7 @@
     //estrarre il json
     $data = json_decode(file_get_contents("php://input"));
 
-    $nome_film = $data -> nome;
+    $nome_film = $data -> nome_film;
     $durata = $data -> durata;
     $descrizione = $data -> descrizione;
 
